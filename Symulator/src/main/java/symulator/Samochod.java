@@ -3,11 +3,13 @@ package symulator;
 public class Samochod {
     Silnik silnik;
     SkrzyniaBiegow skrzyniaBiegow;
+    Pozycja pozycja;
 
 
-    public Samochod(Silnik silnik, SkrzyniaBiegow skrzyniaBiegow) {
+    public Samochod(Silnik silnik, SkrzyniaBiegow skrzyniaBiegow, Pozycja pozycja) {
         this.silnik = silnik;
         this.skrzyniaBiegow = skrzyniaBiegow;
+        this.pozycja = pozycja;
     }
 
     public void wlaczSamochod() {
