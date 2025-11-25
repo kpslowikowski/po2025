@@ -7,7 +7,12 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="Symulator" />
+        <module name="symulator-logika" />
+        <module name="SymulatorGUI" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="MyCar01" target="22" />
+    </bytecodeTargetLevel>
   </component>
 </project>
