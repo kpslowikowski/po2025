@@ -1,6 +1,7 @@
 module auto_ui.symulatorgui {
     requires javafx.controls;
     requires javafx.fxml;
+    requires java.desktop;
 
 
     opens auto_ui.symulatorgui to javafx.fxml;

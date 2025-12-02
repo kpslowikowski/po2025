@@ -26,7 +26,7 @@
 
             <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
                 <Label text="Wybierz samochód:"/>
-                <ComboBox fx:id="carComboBox" prefWidth="150" promptText="Wybierz samochód"/>
+                <ComboBox fx:id="carComboBox" prefWidth="200" promptText="Wybierz samochód"/>
                 <Button fx:id="dodajButton" text="Dodaj nowy" prefWidth="100" onAction="#onDodajButton"/>
                 <Button fx:id="usunButton" text="Usuń" prefWidth="80"/>
             </HBox>

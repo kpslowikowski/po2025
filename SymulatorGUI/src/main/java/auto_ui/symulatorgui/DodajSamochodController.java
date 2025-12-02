@@ -3,8 +3,7 @@ package auto_ui.symulatorgui;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import java.util.ArrayList;
-import java.util.List;
+import symulator.*;
 
 public class DodajSamochodController {
 
@@ -20,47 +19,22 @@ public class DodajSamochodController {
     @FXML private Button cancelButton;
     @FXML private Label statusLabel;
 
-    // Klasa do przechowywania danych samochodu
-    public static class NowySamochodData {
-        public String model;
-        public String nrRej;
-        public double waga;
-        public int predkoscMax;
-        public String typSilnika;
-        public String typSkrzyni;
+    private HelloController mainController;
 
-        public NowySamochodData(String model, String nrRej, double waga, int predkoscMax,
-                                String typSilnika, String typSkrzyni) {
-            this.model = model;
-            this.nrRej = nrRej;
-            this.waga = waga;
-            this.predkoscMax = predkoscMax;
-            this.typSilnika = typSilnika;
-            this.typSkrzyni = typSkrzyni;
-        }
-
-        @Override
-        public String toString() {
-            return model + " (" + nrRej + ")";
-        }
+    public void setMainController(HelloController mainController) {
+        this.mainController = mainController;
     }
-
-    // Lista dodanych samochodów (dla wszystkich instancji)
-    private static List<NowySamochodData> dodaneSamochody = new ArrayList<>();
 
     @FXML
     public void initialize() {
         System.out.println("DodajSamochodController initialized");
 
-        // Inicjalizacja ComboBox
         initializeSilnikComboBox();
         initializeSkrzyniaComboBox();
 
-        // Obsługa zmian
         silnikComboBox.setOnAction(event -> onSilnikSelected());
         skrzyniaComboBox.setOnAction(event -> onSkrzyniaSelected());
 
-        // Wywołaj raz na starcie
         onSilnikSelected();
         onSkrzyniaSelected();
     }
@@ -163,27 +137,35 @@ public class DodajSamochodController {
             return;
         }
 
-        // Utwórz obiekt z danymi
-        NowySamochodData nowySamochod = new NowySamochodData(
-                model,
-                registration,
-                weight,
-                speed,
-                silnikComboBox.getValue(),
-                skrzyniaComboBox.getValue()
-        );
+        try {
+            // Utwórz komponenty
+            int maxObroty = Integer.parseInt(maxObrotyTextField.getText());
+            int liczbaBiegow = Integer.parseInt(liczbaBiegowTextField.getText());
 
-        // Dodaj do listy
-        dodaneSamochody.add(nowySamochod);
+            Silnik silnik = new Silnik(silnikComboBox.getValue(), 150, 5000, maxObroty, 0);
+            SkrzyniaBiegow skrzynia = new SkrzyniaBiegow(skrzyniaComboBox.getValue(), 50, 2000, 0, liczbaBiegow, liczbaBiegow);
+            Pozycja pozycja = new Pozycja(400, 250);
+            Sprzeglo sprzeglo = new Sprzeglo("Sprzęgło standardowe", 15, 800, false);
 
-        System.out.println("Dodano nowy samochód: " + nowySamochod);
-        System.out.println("  Waga: " + weight + " kg, Prędkość max: " + speed + " km/h");
-        System.out.println("  Silnik: " + nowySamochod.typSilnika);
-        System.out.println("  Skrzynia: " + nowySamochod.typSkrzyni);
+            // Utwórz nowy samochód
+            Samochod nowySamochod = new Samochod(
+                    model, registration, weight, speed,
+                    silnik, skrzynia, pozycja, sprzeglo
+            );
 
-        // Zamknięcie okna
-        Stage stage = (Stage) confirmButton.getScene().getWindow();
-        stage.close();
+            // Przekaż nowy samochód do głównego kontrolera
+            if (mainController != null) {
+                mainController.dodajSamochod(nowySamochod);
+            }
+
+            // Zamknięcie okna
+            Stage stage = (Stage) confirmButton.getScene().getWindow();
+            stage.close();
+
+        } catch (Exception e) {
+            statusLabel.setText("Błąd tworzenia samochodu: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 
     @FXML
@@ -191,22 +173,5 @@ public class DodajSamochodController {
         System.out.println("Anulowano dodawanie samochodu");
         Stage stage = (Stage) cancelButton.getScene().getWindow();
         stage.close();
-    }
-
-    // === METODY PUBLICZNE DLA INTEGRACJI ===
-
-    public static List<NowySamochodData> getDodaneSamochody() {
-        return new ArrayList<>(dodaneSamochody); // Zwróć kopię
-    }
-
-    public static void clearDodaneSamochody() {
-        dodaneSamochody.clear();
-    }
-
-    public static void addCarToList(String model, String registration, double weight, int speed) {
-        NowySamochodData samochod = new NowySamochodData(
-                model, registration, weight, speed, "Standardowy", "Manualna"
-        );
-        dodaneSamochody.add(samochod);
     }
 }
