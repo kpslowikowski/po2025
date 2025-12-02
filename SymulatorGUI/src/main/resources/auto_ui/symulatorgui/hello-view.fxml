@@ -4,115 +4,164 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.image.Image?>
 
 <BorderPane xmlns="http://javafx.com/javafx/17.0.2-ea"
             xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="auto_ui.symulatorgui.HelloController"
-            prefWidth="800" prefHeight="600">
+            prefWidth="1000" prefHeight="700">
 
-    <!-- TOP: Menu i ComboBox -->
+    <!-- TOP: Menu i wybór samochodu -->
     <top>
         <VBox spacing="5">
             <MenuBar>
-                <Menu text="File">
+                <Menu text="Plik">
                     <MenuItem text="Dodaj samochód"/>
-                    <MenuItem text="Exit"/>
+                    <MenuItem text="Zamknij"/>
+                </Menu>
+                <Menu text="Edycja">
+                    <MenuItem text="Ustawienia"/>
                 </Menu>
             </MenuBar>
 
-            <HBox spacing="5" style="-fx-padding: 5;">
-                <ComboBox promptText="Wybierz samochód" prefWidth="150"/>
-                <Button text="Dodaj nowy" prefWidth="80"/>
-                <Button text="Usuń" prefWidth="60"/>
+            <HBox spacing="10" alignment="CENTER_LEFT" style="-fx-padding: 10;">
+                <Label text="Wybierz samochód:"/>
+                <ComboBox fx:id="carComboBox" prefWidth="150" promptText="Wybierz samochód"/>
+                <Button fx:id="dodajButton" text="Dodaj nowy" prefWidth="100" onAction="#onDodajButton"/>
+                <Button fx:id="usunButton" text="Usuń" prefWidth="80"/>
             </HBox>
         </VBox>
     </top>
 
-    <!-- LEFT: Panel informacji -->
+    <!-- LEFT: Panel z komponentami samochodu -->
     <left>
-        <VBox spacing="10" style="-fx-padding: 10;" prefWidth="250">
-            <!-- Samochód -->
+        <VBox spacing="15" style="-fx-padding: 15;" prefWidth="320">
+            <!-- PANEL SAMOCHÓD -->
             <TitledPane text="Samochód" expanded="true">
-                <VBox spacing="5" style="-fx-padding: 5;">
-                    <Label text="Model:" style="-fx-font-size: 10;"/>
-                    <TextField promptText="Model" editable="false" prefHeight="25"/>
+                <VBox spacing="8" style="-fx-padding: 10;">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Model:" prefWidth="120"/>
+                        <TextField fx:id="modelTextField" prefWidth="150" editable="false"/>
+                    </HBox>
 
-                    <Label text="Nr rej:" style="-fx-font-size: 10;"/>
-                    <TextField promptText="Nr rej" editable="false" prefHeight="25"/>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Nr rejestracyjny:" prefWidth="120"/>
+                        <TextField fx:id="nrRejTextField" prefWidth="150" editable="false"/>
+                    </HBox>
 
-                    <Label text="Waga:" style="-fx-font-size: 10;"/>
-                    <TextField promptText="Waga" editable="false" prefHeight="25"/>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Waga:" prefWidth="120"/>
+                        <TextField fx:id="wagaTextField" prefWidth="150" editable="false"/>
+                    </HBox>
 
-                    <Label text="Prędkość:" style="-fx-font-size: 10;"/>
-                    <TextField promptText="Prędkość" editable="false" prefHeight="25"/>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Prędkość:" prefWidth="120"/>
+                        <TextField fx:id="predkoscTextField" prefWidth="150" editable="false"/>
+                    </HBox>
 
-                    <!-- POZYCJA SAMOCHODU -->
-                    <Label text="Pozycja X:" style="-fx-font-size: 10;"/>
-                    <TextField fx:id="pozycjaXTextField" text="0" editable="false" prefHeight="25"/>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Pozycja X:" prefWidth="120"/>
+                        <TextField fx:id="pozycjaXTextField" prefWidth="150" editable="false"/>
+                    </HBox>
 
-                    <Label text="Pozycja Y:" style="-fx-font-size: 10;"/>
-                    <TextField fx:id="pozycjaYTextField" text="0" editable="false" prefHeight="25"/>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Pozycja Y:" prefWidth="120"/>
+                        <TextField fx:id="pozycjaYTextField" prefWidth="150" editable="false"/>
+                    </HBox>
 
-                    <HBox spacing="5" style="-fx-padding: 5 0 0 0;">
-                        <Button text="Włącz" prefWidth="60" prefHeight="25"/>
-                        <Button text="Wyłącz" prefWidth="60" prefHeight="25"/>
+                    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                        <Button fx:id="wlaczButton" text="Włącz" prefWidth="80" onAction="#onWlaczButton"/>
+                        <Button fx:id="wylaczButton" text="Wyłącz" prefWidth="80" onAction="#onWylaczButton"/>
                     </HBox>
                 </VBox>
             </TitledPane>
 
-            <!-- Skrzynia biegów -->
+            <!-- PANEL SKRZYNIA BIEGÓW -->
             <TitledPane text="Skrzynia Biegów">
-                <VBox spacing="5" style="-fx-padding: 5;">
-                    <Label text="Bieg:" style="-fx-font-size: 10;"/>
-                    <TextField promptText="Bieg" editable="false" prefHeight="25"/>
+                <VBox spacing="8" style="-fx-padding: 10;">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Aktualny bieg:" prefWidth="120"/>
+                        <TextField fx:id="biegTextField" prefWidth="150" editable="false"/>
+                    </HBox>
 
-                    <HBox spacing="5">
-                        <Button text="+" prefWidth="40" prefHeight="25"/>
-                        <Button text="-" prefWidth="40" prefHeight="25"/>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Maks. biegów:" prefWidth="120"/>
+                        <TextField fx:id="maxBiegowTextField" prefWidth="150" editable="false"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                        <Button fx:id="zwiekszBiegButton" text="Zwiększ bieg" prefWidth="100" onAction="#onZwiekszBiegButton"/>
+                        <Button fx:id="zmniejszBiegButton" text="Zmniejsz bieg" prefWidth="100" onAction="#onZmniejszBiegButton"/>
                     </HBox>
                 </VBox>
             </TitledPane>
 
-            <!-- Silnik -->
+            <!-- PANEL SILNIK -->
             <TitledPane text="Silnik">
-                <VBox spacing="5" style="-fx-padding: 5;">
-                    <Label text="Obroty:" style="-fx-font-size: 10;"/>
-                    <TextField promptText="Obroty" editable="false" prefHeight="25"/>
+                <VBox spacing="8" style="-fx-padding: 10;">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Obroty:" prefWidth="120"/>
+                        <TextField fx:id="obrotyTextField" prefWidth="150" editable="false"/>
+                    </HBox>
 
-                    <HBox spacing="5">
-                        <Button text="Gaz" prefWidth="40" prefHeight="25"/>
-                        <Button text="Ham" prefWidth="40" prefHeight="25"/>
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Maks. obroty:" prefWidth="120"/>
+                        <TextField fx:id="maxObrotyTextField" prefWidth="150" editable="false"/>
+                    </HBox>
+
+                    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                        <Button fx:id="dodajGazuButton" text="Dodaj gazu" prefWidth="100" onAction="#onDodajGazuButton"/>
+                        <Button fx:id="ujmijGazuButton" text="Ujmij gazu" prefWidth="100" onAction="#onUjmijGazuButton"/>
                     </HBox>
                 </VBox>
             </TitledPane>
 
-            <!-- Sprzęgło -->
+            <!-- PANEL SPRZĘGŁO -->
             <TitledPane text="Sprzęgło">
-                <VBox spacing="5" style="-fx-padding: 5;">
-                    <Label text="Stan:" style="-fx-font-size: 10;"/>
-                    <TextField promptText="Stan" editable="false" prefHeight="25"/>
+                <VBox spacing="8" style="-fx-padding: 10;">
+                    <HBox spacing="5" alignment="CENTER_LEFT">
+                        <Label text="Stan:" prefWidth="120"/>
+                        <TextField fx:id="stanSprzeglaTextField" prefWidth="150" editable="false"/>
+                    </HBox>
 
-                    <HBox spacing="5">
-                        <Button text="Wciśnij" prefWidth="60" prefHeight="25"/>
-                        <Button text="Zwolnij" prefWidth="60" prefHeight="25"/>
+                    <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10 0 0 0;">
+                        <Button fx:id="wcisnijSprzegloButton" text="Wciśnij" prefWidth="100" onAction="#onWcisnijSprzegloButton"/>
+                        <Button fx:id="zwolnijSprzegloButton" text="Zwolnij" prefWidth="100" onAction="#onZwolnijSprzegloButton"/>
                     </HBox>
                 </VBox>
             </TitledPane>
         </VBox>
     </left>
 
-    <!-- CENTER: Mapa z samochodem -->
+    <!-- CENTER: Mapa/obraz samochodu -->
     <center>
-        <StackPane fx:id="mapaPane" style="-fx-background-color: #90EE90; -fx-border-color: #006400; -fx-border-width: 2;">
-            <Label text="MAPA"
-                   style="-fx-font-size: 20; -fx-text-fill: #006400; -fx-font-weight: bold;"/>
-            <!-- OBRAZEK SAMOCHODU -->
+        <StackPane fx:id="mapaPane" style="-fx-background-color: #90EE90; -fx-border-color: #006400; -fx-border-width: 3;">
+            <Label text="PLANSZA SYMULATORA"
+                   style="-fx-font-size: 24; -fx-text-fill: #006400; -fx-font-weight: bold;"/>
+
+            <!-- Obrazek samochodu -->
             <ImageView fx:id="carImageView"
-                       fitWidth="50"
-                       fitHeight="30"
-                       preserveRatio="true"
-                       translateX="0"
-                       translateY="0"/>
+                       fitWidth="80"
+                       fitHeight="40"
+                       preserveRatio="true">
+                <image>
+                    <Image url="@samochod.png"/>
+                </image>
+            </ImageView>
         </StackPane>
     </center>
+
+    <!-- BOTTOM: Status i info -->
+    <bottom>
+        <HBox spacing="10" alignment="CENTER" style="-fx-padding: 10; -fx-background-color: #f0f0f0;">
+            <Label fx:id="statusLabel" text="Gotowy" style="-fx-font-weight: bold;"/>
+            <Separator orientation="VERTICAL" prefHeight="20"/>
+            <Label text="Symulator Samochodu v1.0"/>
+        </HBox>
+    </bottom>
+    <HBox spacing="5" alignment="CENTER_LEFT">
+        <Label text="Wskaźnik:" prefWidth="120"/>
+        <ProgressBar fx:id="obrotyProgressBar" prefWidth="150" progress="0"/>
+    </HBox>
+
 </BorderPane>

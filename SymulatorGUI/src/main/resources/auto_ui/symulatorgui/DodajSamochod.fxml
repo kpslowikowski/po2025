@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns="http://javafx.com/javafx/17.0.2-ea"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="auto_ui.symulatorgui.DodajSamochodController"
+      spacing="15"
+      style="-fx-padding: 20; -fx-background-color: #f5f5f5;"
+      prefWidth="400"
+      prefHeight="500">
+
+    <Label text="Dodaj nowy samochód"
+           style="-fx-font-size: 18; -fx-font-weight: bold; -fx-text-fill: #333;"/>
+
+    <Separator/>
+
+    <!-- Sekcja podstawowych informacji -->
+    <TitledPane text="Informacje podstawowe" expanded="true">
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Model:" prefWidth="150"/>
+                <TextField fx:id="modelTextField" prefWidth="200"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Nr rejestracyjny:" prefWidth="150"/>
+                <TextField fx:id="registrationTextField" prefWidth="200"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Waga (kg):" prefWidth="150"/>
+                <TextField fx:id="weightTextField" prefWidth="200"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Prędkość max (km/h):" prefWidth="150"/>
+                <TextField fx:id="speedTextField" prefWidth="200"/>
+            </HBox>
+        </VBox>
+    </TitledPane>
+
+    <!-- Sekcja wyboru silnika -->
+    <TitledPane text="Wybierz silnik">
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Typ silnika:" prefWidth="150"/>
+                <ComboBox fx:id="silnikComboBox" prefWidth="200"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Maks. obroty:" prefWidth="150"/>
+                <TextField fx:id="maxObrotyTextField" prefWidth="200" editable="false"/>
+            </HBox>
+        </VBox>
+    </TitledPane>
+
+    <!-- Sekcja wyboru skrzyni biegów -->
+    <TitledPane text="Wybierz skrzynię biegów">
+        <VBox spacing="10" style="-fx-padding: 10;">
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Typ skrzyni:" prefWidth="150"/>
+                <ComboBox fx:id="skrzyniaComboBox" prefWidth="200"/>
+            </HBox>
+
+            <HBox spacing="10" alignment="CENTER_LEFT">
+                <Label text="Liczba biegów:" prefWidth="150"/>
+                <TextField fx:id="liczbaBiegowTextField" prefWidth="200" editable="false"/>
+            </HBox>
+        </VBox>
+    </TitledPane>
+
+    <!-- Przyciski -->
+    <HBox spacing="20" alignment="CENTER" style="-fx-padding: 20 0 0 0;">
+        <Button fx:id="confirmButton" text="Zatwierdź"
+                prefWidth="120" prefHeight="40"
+                style="-fx-font-weight: bold; -fx-background-color: #4CAF50; -fx-text-fill: white;"
+                onAction="#onConfirmButton"/>
+
+        <Button fx:id="cancelButton" text="Anuluj"
+                prefWidth="120" prefHeight="40"
+                style="-fx-background-color: #f44336; -fx-text-fill: white;"
+                onAction="#onCancelButton"/>
+    </HBox>
+
+    <!-- Status -->
+    <Label fx:id="statusLabel"
+           style="-fx-text-fill: #666; -fx-font-size: 12; -fx-padding: 10 0 0 0;"/>
+
+</VBox>
