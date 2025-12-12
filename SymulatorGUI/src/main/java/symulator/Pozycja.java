@@ -46,11 +46,11 @@ public class Pozycja {
                 this.x += kierunekX * przesuniecie;
                 this.y += kierunekY * przesuniecie;
             }
-        } else {
+        } //else {
             // Jesteśmy już blisko celu - zatrzymaj się
-            this.x = xCel;
-            this.y = yCel;
-        }
+            //this.x = xCel;
+            //this.y = yCel;
+        //}
     }
 
     // GETTERY

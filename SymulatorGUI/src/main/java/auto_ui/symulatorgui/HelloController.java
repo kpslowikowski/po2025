@@ -80,10 +80,10 @@ public class HelloController implements symulator.Listener {
 
         // Ładowanie ikony samochodu
         try {
-            Image carImage = new Image(getClass().getResource("/images/car.png").toExternalForm());
+            Image carImage = new Image(getClass().getResource("samochod.png").toExternalForm());
             carImageView.setImage(carImage);
-            carImageView.setFitWidth(60);
-            carImageView.setFitHeight(30);
+            carImageView.setFitWidth(80);
+            carImageView.setFitHeight(40);
         } catch (Exception e) {
             System.out.println("Błąd ładowania obrazka: " + e.getMessage());
             // Utwórz prosty prostokąt jako fallback
@@ -113,7 +113,7 @@ public class HelloController implements symulator.Listener {
             // Tworzenie komponentów
             this.silnik = new Silnik("Silnik V8", 150, 5000, 6000, 0);
             this.skrzyniaBiegow = new SkrzyniaBiegow("Skrzynia manualna", 50, 2000, 0, 6, 6);
-            this.pozycja = new Pozycja(400, 250);
+            this.pozycja = new Pozycja(0, 0);
             this.sprzeglo = new Sprzeglo("Sprzęgło hydrauliczne", 15, 800, false);
             this.samochod = new Samochod(silnik, skrzyniaBiegow, pozycja, sprzeglo);
 
@@ -171,17 +171,28 @@ public class HelloController implements symulator.Listener {
 
     private void setupMouseClickHandler() {
         mapaPane.setOnMouseClicked(event -> {
-            double x = event.getX();
-            double y = event.getY();
+            double x = event.getX();  // To jest gdzie kliknąłeś
+            double y = event.getY();  // To ma być ŚRODEK auta
 
-            System.out.println("Kliknięto na mapie: X=" + x + ", Y=" + y);
-            System.out.println("Aktualna pozycja auta: X=" + samochod.getPozycja().getX() + ", Y=" + samochod.getPozycja().getY());
+            double autoWidth = carImageView.getFitWidth();   // 80
+            double autoHeight = carImageView.getFitHeight(); // 40
+            double mapaWidth = mapaPane.getWidth();         // 1216
+            double mapaHeight = mapaPane.getHeight();       // 718
 
-            Pozycja nowaPozycja = new Pozycja(x, y);
+            // Ogranicz kliknięcie - środek auta musi być w granicach
+            double minX = autoWidth / 2;     // 40
+            double maxX = mapaWidth - autoWidth / 2;  // 1176
+            double minY = autoHeight / 2;    // 20
+            double maxY = mapaHeight - autoHeight / 2; // 698
+
+            x = Math.max(minX, Math.min(maxX, x));
+            y = Math.max(minY, Math.min(maxY, y));
+
+            System.out.println("Kliknięto: (" + x + ", " + y + ")");
 
             if (samochod != null) {
-                samochod.jedzDo(nowaPozycja);
-                statusLabel.setText("Jadę do pozycji: (" + String.format("%.0f", x) + ", " + String.format("%.0f", y) + ")");
+                samochod.jedzDo(new Pozycja(x, y));  // Przekaż ŚRODEK auta
+                statusLabel.setText("Jadę do: (" + (int)x + ", " + (int)y + ")");
             }
         });
     }
@@ -201,25 +212,44 @@ public class HelloController implements symulator.Listener {
         if (samochod != null && carImageView != null && samochod.getPozycja() != null) {
             Platform.runLater(() -> {
                 try {
-                    double x = samochod.getPozycja().getX();
-                    double y = samochod.getPozycja().getY();
+                    double x = samochod.getPozycja().getX();  // To jest ŚRODEK auta
+                    double y = samochod.getPozycja().getY();  // To jest ŚRODEK auta
 
-                    // Debug: wypisz pozycję
-                    if (Math.random() < 0.1) { // Tylko czasami, żeby nie zaśmiecać konsoli
-                        System.out.println("Aktualizuję pozycję obrazka: X=" + x + ", Y=" + y);
-                    }
+                    double autoWidth = carImageView.getFitWidth();   // 80
+                    double autoHeight = carImageView.getFitHeight(); // 40
+                    double mapaWidth = mapaPane.getWidth();         // 1216
+                    double mapaHeight = mapaPane.getHeight();       // 718
 
-                    // Ustaw pozycję obrazka
-                    carImageView.setTranslateX(x - carImageView.getFitWidth() / 2);
-                    carImageView.setTranslateY(y - carImageView.getFitHeight() / 2);
+                    System.out.println("DEBUG: x=" + x + ", y=" + y +
+                            ", auto=" + autoWidth + "x" + autoHeight +
+                            ", mapa=" + mapaWidth + "x" + mapaHeight);
+
+                    // OGRANICZENIA dla ŚRODKA auta:
+                    // Środek musi być min. 40px od lewej (bo lewa krawędź auta = środek - 40)
+                    // Środek musi być min. 20px od góry (bo górna krawędź auta = środek - 20)
+                    // Środek musi być max. 1176px od lewej (bo prawa krawędź = środek + 40)
+                    // Środek musi być max. 698px od góry (bo dolna krawędź = środek + 20)
+
+                    double minX = autoWidth / 2;     // 40 - środek nie może być bliżej niż 40 od lewej
+                    double maxX = mapaWidth - autoWidth / 2;  // 1216 - 40 = 1176
+                    double minY = autoHeight / 2;    // 20 - środek nie może być bliżej niż 20 od góry
+                    double maxY = mapaHeight - autoHeight / 2; // 718 - 20 = 698
+
+                    x = Math.max(minX, Math.min(maxX, x));
+                    y = Math.max(minY, Math.min(maxY, y));
+
+                    System.out.println("  Po ograniczeniu: x=" + x + ", y=" + y);
+
+                    // Ustaw - środek auta na (x,y)
+                    carImageView.setTranslateX(x - autoWidth / 2);
+                    carImageView.setTranslateY(y - autoHeight / 2);
 
                 } catch (Exception e) {
-                    System.out.println("Błąd aktualizacji obrazka: " + e.getMessage());
+                    System.out.println("Błąd: " + e.getMessage());
                 }
             });
         }
     }
-
     // === METODY OBSŁUGI ZDARZEŃ ===
 
     @FXML
@@ -458,8 +488,8 @@ public class HelloController implements symulator.Listener {
     }
 
     private void ustawSamochodNaSrodku() {
-        double centerX = 400;
-        double centerY = 250;
+        double centerX = mapaPane.getWidth() / 2;
+        double centerY = mapaPane.getHeight() / 2;
 
         if (pozycja != null) {
             pozycja.UaktualnijPozycje(centerX, centerY);
@@ -543,5 +573,26 @@ public class HelloController implements symulator.Listener {
             alert.setContentText(wiadomosc);
             alert.showAndWait();
         });
+    }
+    @FXML
+    private void onTestButton() {
+        System.out.println("=== PRAWDZIWY TEST ===");
+
+        // 1. Gdzie jest mapa?
+        System.out.println("1. mapaPane: " + mapaPane.getWidth() + "x" + mapaPane.getHeight());
+        System.out.println("2. carImageView rozmiar: " + carImageView.getFitWidth() + "x" + carImageView.getFitHeight());
+
+        // 2. Gdzie jest (0,0) na mapie?
+        System.out.println("3. Kliknij teraz w LEWY GÓRNY róg zielonego obszaru!");
+        System.out.println("   Potem powiedz mi jakie współrzędne pokazuje w konsoli.");
+
+        // 3. Gdzie jest samochód w logice vs GUI?
+        System.out.println("4. Logika samochodu: (" + samochod.getPozycja().getX() + ", " + samochod.getPozycja().getY() + ")");
+        System.out.println("5. GUI samochodu (translate): (" + carImageView.getTranslateX() + ", " + carImageView.getTranslateY() + ")");
+
+        // 6. Oblicz różnicę
+        double diffX = samochod.getPozycja().getX() - carImageView.getTranslateX();
+        double diffY = samochod.getPozycja().getY() - carImageView.getTranslateY();
+        System.out.println("6. RÓŻNICA: (" + diffX + ", " + diffY + ")");
     }
 }
