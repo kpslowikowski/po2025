@@ -90,4 +90,7 @@ Arkadiusz Baran, Maciek Miłek
 35) System Zarządzania Sprzętem Sieciowym Korporacji: Inwentaryzacja urządzeń (routery, switche, access pointy itp.), monitorowanie statusu (w użyciu/nie używane), rejestrowanie konfiguracji (podłączenia poszczególnych portów).
 Roch Głogowski, Antoni Janek
 
-36) Inteligentna spiżarka: spis jedzenia i produktów w spiżarce, książka kucharska, sprawdzanie dostępnych przepisów na podstawie stanu spiżarki 
+36) Inteligentna spiżarka: spis jedzenia i produktów w spiżarce, książka kucharska, sprawdzanie dostępnych przepisów na podstawie stanu spiżarki
+
+37) Platforma Społecznościowa: Użytkownicy, Posty, Komentarze
+Krzysztof Słowikowski, Hanna Kałamaga
